@@ -3,7 +3,7 @@ import env from "@/lib/env-config";
 
 const { combine, colorize, align, printf, timestamp } = format;
 
-const loggerLevel = env.NODE_ENV === "development" ? "debug" : "info";
+const loggerLevel = env?.NODE_ENV === "development" ? "debug" : "info";
 
 const loggerFormat = combine(
   format((info) => {

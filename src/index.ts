@@ -23,6 +23,9 @@ process.on("unhandledRejection", (err: Error) => {
 
 process.on("uncaughtException", (err: Error) => {
   logger.error(err.name + " - " + err.message);
+
+  console.log(err);
+
   logger.error("UNHANDLED EXCEPTION! 💥 Shutting down...");
   process.exit(1);
 });

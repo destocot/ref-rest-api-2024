@@ -5,7 +5,7 @@ import env from "@/lib/env-config";
 class JwtUtils {
   static sign(payload: JwtPayload) {
     return jwt.sign(payload, env.JWT_SECRET, {
-      expiresIn: "5m",
+      expiresIn: "10m",
     });
   }
 

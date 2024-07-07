@@ -1,3 +1,5 @@
+import { UnauthorizedError } from "@/lib/errors";
+import logger from "@/lib/logger";
 import { JwtPayload } from "@/types";
 import JwtUtils from "@/utils/jwt";
 import type { Request, Response, NextFunction } from "express";
@@ -5,16 +7,18 @@ import type { Request, Response, NextFunction } from "express";
 const authGuard = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.headers.authorization?.split(" ")[1];
 
-  if (!accessToken) return res.sendStatus(401);
+  if (!accessToken) {
+    throw new UnauthorizedError("Access token is required");
+  }
 
   try {
     const payload = JwtUtils.verify(accessToken);
 
-    console.log("payload", payload);
+    logger.debug(payload);
 
     req.user = payload as JwtPayload;
   } catch (err) {
-    return res.sendStatus(500);
+    throw new UnauthorizedError("Invalid access token");
   }
 
   next();
