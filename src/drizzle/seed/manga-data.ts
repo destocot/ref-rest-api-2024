@@ -1,0 +1,88 @@
+import { InsertManga } from "@/types";
+
+export const mangaData: Array<InsertManga> = [
+  {
+    title: "Naruto",
+    authorFname: "Masashi",
+    authorLname: "Kishimoto",
+    status: "finished",
+    publishedAt: new Date("1999-09-21"),
+  },
+  {
+    title: "One Piece",
+    authorFname: "Eiichiro",
+    authorLname: "Oda",
+    status: "publishing",
+    publishedAt: new Date("1997-07-22"),
+  },
+  {
+    title: "Attack on Titan",
+    authorFname: "Hajime",
+    authorLname: "Isayama",
+    status: "finished",
+    publishedAt: new Date("2009-09-09"),
+  },
+  {
+    title: "My Hero Academia",
+    authorFname: "Kohei",
+    authorLname: "Horikoshi",
+    status: "publishing",
+    publishedAt: new Date("2014-07-07"),
+  },
+  {
+    title: "Fullmetal Alchemist",
+    authorFname: "Hiromu",
+    authorLname: "Arakawa",
+    status: "finished",
+    publishedAt: new Date("2001-07-12"),
+  },
+  {
+    title: "Death Note",
+    authorFname: "Tsugumi",
+    authorLname: "Ohba",
+    status: "finished",
+    publishedAt: new Date("2003-12-01"),
+  },
+  {
+    title: "Demon Slayer",
+    authorFname: "Koyoharu",
+    authorLname: "Gotouge",
+    status: "finished",
+    publishedAt: new Date("2016-02-15"),
+  },
+  {
+    title: "Dragon Ball",
+    authorFname: "Akira",
+    authorLname: "Toriyama",
+    status: "finished",
+    publishedAt: new Date("1984-12-03"),
+  },
+  {
+    title: "Sword Art Online",
+    authorFname: "Reki",
+    authorLname: "Kawahara",
+    status: "publishing",
+    publishedAt: new Date("2009-04-10"),
+  },
+  {
+    title: "Tokyo Ghoul",
+    authorFname: "Sui",
+    authorLname: "Ishida",
+    status: "finished",
+    publishedAt: new Date("2011-09-08"),
+  },
+  {
+    title: "Bleach",
+    authorFname: "Tite",
+    authorLname: "Kubo",
+    status: "finished",
+    publishedAt: new Date("2001-08-07"),
+  },
+  {
+    title: "Black Clover",
+    authorFname: "Yūki",
+    authorLname: "Tabata",
+    status: "publishing",
+    publishedAt: new Date("2015-02-16"),
+  },
+];

@@ -1,12 +1,10 @@
 import type { Request, Response } from "express";
 import UsersService from "./users.service";
 import type {
-  CreateUserSchema,
   DeleteUserSchema,
   FindOneUserSchema,
   UpdateUserSchema,
 } from "./users.schema";
-import { error } from "node:console";
 
 class UsersController {
   private readonly usersService: UsersService;

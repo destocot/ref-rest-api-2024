@@ -7,14 +7,13 @@ import {
   updateUserSchema,
 } from "./users.schema";
 import UsersService from "./users.service";
-import authGuard from "@/middleware/auth-guard";
 
 const userRouter = Router();
 
 const usersService = new UsersService();
 const usersController = new UsersController(usersService);
 
-userRouter.get("/", authGuard, usersController.findAll);
+userRouter.get("/", usersController.findAll);
 
 userRouter.get(
   "/:userId",

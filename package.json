@@ -9,7 +9,8 @@
     "dev": "NODE_ENV=development nodemon --signal SIGTERM -r dotenv/config -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "node -r dotenv/config -r tsconfig-paths/register -r ts-node/register src/drizzle/migrate.ts"
+    "db:migrate": "node -r dotenv/config -r tsconfig-paths/register -r ts-node/register src/drizzle/migrate.ts",
+    "db:seed": "node -r dotenv/config -r tsconfig-paths/register -r ts-node/register src/drizzle/seed/index.ts --reset"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "argon2": "^0.40.3",
     "drizzle-orm": "^0.31.2",
     "express": "^4.19.2",

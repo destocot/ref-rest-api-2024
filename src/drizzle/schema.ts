@@ -24,8 +24,6 @@ export const MangaTable = pgTable("mangas", {
   mangaId: uuid("manga_id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
-
   title: varchar("title").notNull(),
   authorFname: varchar("author_fname").notNull(),
   authorLname: varchar("author_lname").notNull(),
@@ -43,7 +41,7 @@ export const FavoriteTable = pgTable(
   {
     userId: uuid("user_id")
       .notNull()
-      .references(() => UserTable.userId),
+      .references(() => UserTable.userId, { onDelete: "cascade" }),
     mangaId: uuid("manga_id")
       .notNull()
       .references(() => MangaTable.mangaId),

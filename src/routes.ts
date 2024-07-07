@@ -4,6 +4,7 @@ import authRouter from "@/resources/auth/auth.routes";
 import mangaRouter from "@/resources/mangas/mangas.routes";
 import { NotFoundError } from "@/lib/errors";
 import authGuard from "./middleware/auth-guard";
+import favoritesRouter from "@/resources/users/favorites/favorites.routes";
 
 const router = Router();
 
@@ -12,7 +13,10 @@ router.get("/healthcheck", (req, res) => {
 });
 
 router.use("/api/auth", authRouter);
+
 router.use("/api/users", userRouter);
+router.use("/api/users/:userId/favorites", favoritesRouter);
+
 router.use("/api/mangas", authGuard, mangaRouter);
 
 router.all("*", (req, res) => {
