@@ -13,7 +13,7 @@ router.use("/api/auth", authRouter);
 router.use("/api/users", usersRouter);
 
 router.all("*", (req, res) => {
-  throw new NotFoundError("Route Not Found");
+  throw new NotFoundError("Route not found");
 });
 
 export default router;
