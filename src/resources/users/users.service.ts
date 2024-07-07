@@ -1,23 +1,23 @@
-import type { Database, Schema } from "@/lib/types";
-import Argon2Utils from "@/utils/argon2.utils";
-import { eq, getTableColumns } from "drizzle-orm";
+import ArgonUtils from "@/utils/argon";
+import { eq } from "drizzle-orm";
+import type {
+  CreateUserSchema,
+  DeleteUserSchema,
+  FindOneUserSchema,
+  UpdateUserSchema,
+} from "./users.schema";
+
+import { UserTable } from "@/drizzle/schema";
+import db from "@/drizzle";
 
 class UsersService {
-  private readonly db: Database;
-  private readonly usersTable: Schema["UserTable"];
-
-  constructor(db: Database, UserTable: Schema["UserTable"]) {
-    this.db = db;
-    this.usersTable = UserTable;
-  }
-
   async findAll() {
-    return await this.db.query.UserTable.findMany();
+    return await db.query.UserTable.findMany();
   }
 
-  async findOne(userId: string) {
-    const user = await this.db.query.UserTable.findFirst({
-      where: eq(this.usersTable.userId, userId),
+  async findOne(userId: FindOneUserSchema["params"]["userId"]) {
+    const user = await db.query.UserTable.findFirst({
+      where: eq(UserTable.userId, userId),
     });
 
     if (!user) return null;
@@ -25,45 +25,40 @@ class UsersService {
     return user;
   }
 
-  async create(body: any) {
-    if (!body.name || !body.email || !body.password) return;
+  async create(body: CreateUserSchema["body"]) {
+    const hashedPassword = await ArgonUtils.hash(body.password);
 
-    const hashedPassword = await Argon2Utils.hashPassword(body.password);
-
-    await this.db.insert(this.usersTable).values({
-      name: body.name,
-      email: body.email,
-      hashedPassword,
-    });
+    return await db
+      .insert(UserTable)
+      .values({
+        name: body.name,
+        email: body.email,
+        password: hashedPassword,
+      })
+      .returning({ userId: UserTable.userId });
   }
 
-  async update(userId: string, body: any) {
-    if (!body.name && !body.email && !body.password) return;
-
-    const usersTableColumns = getTableColumns(this.usersTable);
-
-    const columns: Partial<typeof this.usersTable.$inferInsert> = {};
-
-    for (const column in usersTableColumns) {
-      if (body[column]) columns[column as keyof typeof columns] = body[column];
-    }
-
+  async update(
+    userId: UpdateUserSchema["params"]["userId"],
+    body: UpdateUserSchema["body"]
+  ) {
     if (body.password) {
-      columns.hashedPassword = await Argon2Utils.hashPassword(body.password);
+      const hashedPassword = await ArgonUtils.hash(body.password);
+      body.password = hashedPassword;
     }
 
-    console.log(columns);
-
-    await this.db
-      .update(this.usersTable)
-      .set(columns)
-      .where(eq(this.usersTable.userId, userId));
+    return await db
+      .update(UserTable)
+      .set(body)
+      .where(eq(UserTable.userId, userId))
+      .returning({ userId: UserTable.userId });
   }
 
-  async remove(userId: string) {
-    await this.db
-      .delete(this.usersTable)
-      .where(eq(this.usersTable.userId, userId));
+  async remove(userId: DeleteUserSchema["params"]["userId"]) {
+    return await db
+      .delete(UserTable)
+      .where(eq(UserTable.userId, userId))
+      .returning({ userId: UserTable.userId });
   }
 }
 

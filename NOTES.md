@@ -58,7 +58,7 @@ pnpm add @types/node @types/express --save-dev
 
 ```json
 // package.json
-"dev": "node --watch --env-file=.env -r tsconfig-paths/register -r ts-node/register src/index.ts",
+"dev": "NODE_ENV=development nodemon -r dotenv/config -r tsconfig-paths/register src/index.ts",
 ```
 
 || Test /healthcheck
@@ -96,9 +96,10 @@ pnpm add valibot
 || create src/drizzle/schema
 || create src/drizzle/migrate
 
-```
-"db:generate": drizzle-kit generate
-"db:migrate": "node --env-file=.env -r tsconfig-paths/register -r ts-node/register src/drizzle/migrate.ts"
+```json
+// package.json
+"db:generate": "drizzle-kit generate",
+"db:migrate": "node -r dotenv/config -r tsconfig-paths/register -r ts-node/register src/drizzle/migrate.ts"
 ```
 
 **resources/users**
@@ -131,7 +132,48 @@ git init
 build and test
 ```
 
+|| valibot validations for users
+
+|| middleware validate resource
+
 > > PART 2 < <
 
+|| auth
+
+move some user stuff to auth
+
+create sign up
+create sign in
+
+setup jwt utils
+
+```
+pnpm add jsonwebtoken
+pnpm add @types/jsonwebtoken --save-dev
+```
+
+access token
+
+auth-guard middleware
+
+> > PART 3 < <
+
 logger (winston)
-validator with valibot
+
+Eror Handling
+
+> > PART 4 < <
+
+Relations Time
+
+> > PART 5 < <
+
+TESTING
+
+> > PART 6 <<
+
+swagger
+
+> > PART 7 <<
+
+react

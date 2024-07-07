@@ -1,46 +1,64 @@
 import type { Request, Response } from "express";
-import db from "@/drizzle";
-import { UserTable } from "@/drizzle/schema";
 import UsersService from "./users.service";
-
-const usersService = new UsersService(db, UserTable);
+import type {
+  CreateUserSchema,
+  DeleteUserSchema,
+  FindOneUserSchema,
+  UpdateUserSchema,
+} from "./users.schema";
+import { error } from "node:console";
 
 class UsersController {
-  async findAll(req: Request, res: Response) {
-    const users = await usersService.findAll();
-    res.status(200).json({ data: users });
+  private readonly usersService: UsersService;
+
+  constructor(usersService: UsersService) {
+    this.usersService = usersService;
   }
 
-  async findOne(req: Request, res: Response) {
+  findAll = async (req: Request, res: Response) => {
+    const users = await this.usersService.findAll();
+    res.status(200).json({ data: users });
+  };
+
+  findOne = async (
+    req: Request<FindOneUserSchema["params"]>,
+    res: Response
+  ) => {
     const userId = req.params.userId;
 
-    const user = await usersService.findOne(userId);
+    const user = await this.usersService.findOne(userId);
 
     res.status(200).json({ data: user });
-  }
+  };
 
-  async create(req: Request, res: Response) {
-    const body = req.body;
+  create = async (req: Request, res: Response) => {
+    res.status(301).json({ data: { newUrl: "/api/auth/signup" } });
+  };
 
-    await usersService.create(body);
-
-    res.status(201).json({ data: { success: true } });
-  }
-
-  async update(req: Request, res: Response) {
+  update = async (
+    req: Request<UpdateUserSchema["params"], {}, UpdateUserSchema["body"]>,
+    res: Response
+  ) => {
     const userId = req.params.userId;
     const body = req.body;
 
-    await usersService.update(userId, body);
-    res.status(200).json({ data: { success: true } });
-  }
+    const [updatedUser] = await this.usersService.update(userId, body);
+    res
+      .status(200)
+      .json({ data: { acknowledged: true, updatedId: updatedUser.userId } });
+  };
 
-  async remove(req: Request, res: Response) {
+  remove = async (req: Request<DeleteUserSchema["params"]>, res: Response) => {
     const userId = req.params.userId;
 
-    await usersService.remove(userId);
-    res.status(200).json({ data: { success: true } });
-  }
+    const [deletedUser] = await this.usersService.remove(userId);
+    res.status(200).json({
+      data: {
+        acknowledged: true,
+        deletedId: deletedUser.userId,
+      },
+    });
+  };
 }
 
 export default UsersController;

@@ -11,5 +11,5 @@ export const UserTable = pgTable("users", {
 
   name: varchar("name").notNull(),
   email: varchar("email").notNull().unique(),
-  hashedPassword: varchar("hashed_password").notNull(),
+  password: varchar("password").notNull(),
 });

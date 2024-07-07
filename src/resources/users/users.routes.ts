@@ -1,18 +1,39 @@
 import { Router } from "express";
 import UsersController from "./users.controller";
+import validateResource from "@/middleware/validate-resource";
+import {
+  deleteUserSchema,
+  findOneUserSchema,
+  updateUserSchema,
+} from "./users.schema";
+import UsersService from "./users.service";
+import authGuard from "@/middleware/auth-guard";
 
-const router = Router();
+const userRouter = Router();
 
-const usersController = new UsersController();
+const usersService = new UsersService();
+const usersController = new UsersController(usersService);
 
-router.get("/", usersController.findAll);
+userRouter.get("/", authGuard, usersController.findAll);
 
-router.get("/:userId", usersController.findOne);
+userRouter.get(
+  "/:userId",
+  validateResource(findOneUserSchema),
+  usersController.findOne
+);
 
-router.post("/", usersController.create);
+userRouter.post("/", usersController.create);
 
-router.patch("/:userId", usersController.update);
+userRouter.patch(
+  "/:userId",
+  validateResource(updateUserSchema),
+  usersController.update
+);
 
-router.delete("/:userId", usersController.remove);
+userRouter.delete(
+  "/:userId",
+  validateResource(deleteUserSchema),
+  usersController.remove
+);
 
-export default router;
+export default userRouter;
